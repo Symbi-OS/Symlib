@@ -5,7 +5,12 @@
 /* #include <sys/syscall.h> */
 
 /* #include "L0/sym_lib.h" */
+#define ARLO_GS
 
+#ifdef ARLO_GS
+#define GET_KERN_GS_CLOBBER_USER_GS                           \
+  asm("movl $0xc0000102, %%ecx; rdmsr;wrgsbase %%rax; movq %%rax, %0; sti;" :"=rm"(kern_gs) : :"%rax", "%edx", "%ecx");
+#else
 // get onto kern gs
 // Store kern gs
 // get onto user gs
@@ -18,4 +23,5 @@
   asm("wrgsbase %0" :: "r"(kern_gs) );                        \
   asm("sti");
 
+#endif //ARLO_GS
 #endif
