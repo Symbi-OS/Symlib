@@ -9,7 +9,7 @@
 
 #ifdef ARLO_GS
 #define GET_KERN_GS_CLOBBER_USER_GS                           \
-  asm("movl $0xc0000102, %%ecx; rdmsr;wrgsbase %%rax; movq %%rax, %0; sti;" :"=rm"(kern_gs) : :"%rax", "%edx", "%ecx");
+  asm("movl $0xc0000102, %%ecx; rdmsr; shl $0x20, %%rdx; add %%rdx, %%rax; wrgsbase %%rax; movq %%rax, %0; sti;" :"=rm"(kern_gs) : :"%rax", "%edx", "%ecx");
 #else
 // get onto kern gs
 // Store kern gs
