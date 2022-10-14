@@ -16,6 +16,8 @@ SRC_L3=$(wildcard $(SRC_DIR)/L3/*.c)
 SRC_LINF=$(wildcard $(SRC_DIR)/LINF/*.c)
 SRC_LIDK=$(wildcard $(SRC_DIR)/LIDK/*.c)
 
+ALL_SRC=$(SRC_L0) $(SRC_L1) $(SRC_L2) #$(SRC_L3) $(SRC_LINF) $(SRC_LIDK)
+
 # BUILD DIRECTORIES
 BUILD_DIR=build
 BUILD_DIR_L0=$(BUILD_DIR)/L0
@@ -57,6 +59,16 @@ ALL_LIBS =$(LIB_L0) $(LIB_L1) $(LIB_L2) $(LIB_L3) $(LIB_LINF) $(LIB_SYM)
 boldprint = @printf '\e[1m%s\e[0m\n' $1
 
 all: $(ALL_LIBS)
+
+# TODO: Extend this to build each layer, but for now just lump all together.
+
+libSym.so:
+	mkdir -p dynam_build/
+	gcc -D DYNAM -D CONFIG_X86_64 -Wall -Wextra -shared -fPIC -I ./include $(ALL_SRC) -o dynam_build/$@
+
+debug:
+	mkdir -p dynam_build/
+	gcc  -D CONFIG_X86_64 -fPIC -shared -I ./include src/L2/sym_lib_page_fault.c -o dynam_build/libSym.so
 
 dynam_L0:
 	mkdir -p dynam_build/L0/

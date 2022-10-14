@@ -186,10 +186,10 @@ static uint64_t __attribute__((unused))my_entry = (uint64_t) &pg_ft_c_entry;
 /* extern uint64_t c_handler_page_fault; */
 
 // NOTE: semicolons for editor only.
-FINAL_HANDLER(c_handler_page_fault, *my_entry, *orig_asm_exc_page_fault);
+/* FINAL_HANDLER(c_handler_page_fault, *my_entry, *orig_asm_exc_page_fault); */
 
 
-FINAL_HANDLER(c_df_handler, *my_df_entry, *my_asm_exc_page_fault);
+/* FINAL_HANDLER(c_df_handler, *my_df_entry, *my_asm_exc_page_fault); */
 __attribute__((aligned (16)))
 static void df_c_entry_dep(){
   // Error code on DF is 0,
@@ -256,8 +256,7 @@ static __attribute((unused)) void tf_c_entry(struct pt_regs *pt_r){
   /* } */
 }
 
-
-
+#if 0
 void sym_interpose_on_df_c(unsigned char * my_idt){
   // Get ptr to df desc
   union idt_desc *desc_old;
@@ -278,6 +277,7 @@ void sym_interpose_on_df_c(unsigned char * my_idt){
   // Set IDT to point to our new interposer
   sym_load_desc_from_addr(desc_old, &new_asm_exc_addr);
 }
+#endif
 
 // TODO: clean up this code duplication
 // TODO also arg types
@@ -302,6 +302,7 @@ void sym_interpose_on_df_asm(unsigned char * my_idt, unsigned char *handler_pg){
   sym_load_desc_from_addr(desc_old, &new_asm_exc_addr);
 }
 
+#if 0
 void sym_interpose_on_pg_ft_c(unsigned char * my_idt){
   // Get ptr to pf desc
   union idt_desc *desc_old = sym_get_idt_desc(my_idt, PG_FT_IDX);
@@ -320,6 +321,7 @@ void sym_interpose_on_pg_ft_c(unsigned char * my_idt){
   // Set IDT to point to our new interposer
   sym_load_desc_from_addr(desc_old, &new_asm_exc_addr);
 }
+#endif
 
 
 void sym_toggle_pg_ft_ist(unsigned char *my_idt, unsigned int enable){
