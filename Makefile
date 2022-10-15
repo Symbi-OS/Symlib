@@ -16,7 +16,7 @@ SRC_L3=$(wildcard $(SRC_DIR)/L3/*.c)
 SRC_LINF=$(wildcard $(SRC_DIR)/LINF/*.c)
 SRC_LIDK=$(wildcard $(SRC_DIR)/LIDK/*.c)
 
-ALL_SRC=$(SRC_L0) $(SRC_L1) $(SRC_L2) #$(SRC_L3) $(SRC_LINF) $(SRC_LIDK)
+ALL_SRC=$(SRC_L0) $(SRC_L1) $(SRC_L2) $(SRC_L3) $(SRC_LINF) $(SRC_LIDK)
 
 # BUILD DIRECTORIES
 BUILD_DIR=build
@@ -54,7 +54,8 @@ LIB_LINF=$(BUILD_DIR_LINF)/LINF.a
 
 # The superset lib.
 LIB_SYM=$(BUILD_DIR)/libsym.a
-ALL_LIBS =$(LIB_L0) $(LIB_L1) $(LIB_L2) $(LIB_L3) $(LIB_LINF) $(LIB_SYM)
+DYNAM_LIB_SYM=libSym.so
+ALL_LIBS =$(LIB_L0) $(LIB_L1) $(LIB_L2) $(LIB_L3) $(LIB_LINF) $(LIB_SYM) $(DYNAM_LIB_SYM)
 
 boldprint = @printf '\e[1m%s\e[0m\n' $1
 
