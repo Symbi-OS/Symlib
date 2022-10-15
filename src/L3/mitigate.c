@@ -4,6 +4,7 @@
 #include "L2/sym_lib_page_fault.h"
 #include "L3/mitigate.h"
 
+#if 0
 static void sym_copy_idt(unsigned char *user_idt){
   // We want to check if another interposition has already taken over idt
   struct dtr check_idtr;
@@ -17,8 +18,10 @@ static void sym_copy_idt(unsigned char *user_idt){
     printf("no copy made pg_ft\n");
   }
 }
+#endif
 
 static struct dtr system_idtr;
+#if 0
 void sym_mitigate_pf(unsigned char *user_idt){
   sym_store_idt_desc(&system_idtr);
 
@@ -28,6 +31,7 @@ void sym_mitigate_pf(unsigned char *user_idt){
   sym_set_idtr((unsigned long)user_idt, IDT_SZ_BYTES - 1);
 
 }
+#endif
 
 void sym_mitigate_pf_cleanup(){
   // Swing back onto system idtr before exit
