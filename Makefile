@@ -64,7 +64,8 @@ all: $(ALL_LIBS)
 
 libSym.so:
 	mkdir -p dynam_build/
-	gcc -D DYNAM -D CONFIG_X86_64 -Wall -Wextra -shared -fPIC -I ./include $(ALL_SRC) -o dynam_build/$@
+	gcc -D CONFIG_X86_64 -Wall -Wextra -shared -fPIC -I ./include $(ALL_SRC) -o dynam_build/$@
+	$(call boldprint, 'Built libSym.so')
 
 debug:
 	mkdir -p dynam_build/
