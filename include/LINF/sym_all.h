@@ -9,6 +9,7 @@
 #include "L1/sym_interrupts.h"
 #include "L2/sym_lib_page_fault.h"
 #include "L2/sym_probe.h"
+#include "L2/sym_get_addr.h"
 #include "L3/mitigate.h"
 
 // HACK: Be careful with this. Is it behind a #define for x64 here, when the user includes it?
