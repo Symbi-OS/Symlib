@@ -6,13 +6,20 @@
 #include "L2/sym_probe.h"
 
 void* sym_get_fn_address(char *symbol){
-  struct kallsymlib_info *info;
+  // Elevate to be able to call kallsyms_lookup_name
+  sym_elevate();  
+
+  struct kallsymlib_info info;
 
   if (!kallsymlib_lookup(symbol, &info)) {
     fprintf(stderr, "%s : not found\n", symbol);
     while(1);
   }
-  return (void *) info->addr;
+
+  // Don't forget to lower
+  sym_lower();
+
+  return (void*)info.addr;
 }
 
 void sym_l2_init(){
