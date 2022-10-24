@@ -233,7 +233,9 @@ unsigned char sym_set_probe(uint64_t addr){
     fprintf(stderr, "Error, byte to be replaced by int3 0xcc was not 0xf as needed by hard coded interposer.\n");
     while(1);
   }
+  printf("preparing to call sym_make_pg_writable\n");
   sym_make_pg_writable(addr);
+  printf("made page writable\n");
 
   sym_elevate();
   // Magic write int3 instruction.
