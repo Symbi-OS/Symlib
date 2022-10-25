@@ -384,7 +384,6 @@ void sym_make_pg_writable(uint64_t addr){
 void sym_make_pg_unwritable(uint64_t addr){
   unsigned int level;
   sym_elevate();
-  printf("made page writable\n");
   // Get PTE 
   struct pte* pte_p = sym_get_pte(addr, &level);
   pte_p->RW = 0;
