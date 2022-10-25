@@ -371,13 +371,10 @@ void sym_print_pte(struct pte *pte){
 
 void sym_make_pg_writable(uint64_t addr){
   sym_elevate();
-  // Get PTEi
+  // Get PTE
   lookup_address_t my_lookup_address = sym_get_fn_address("lookup_address");
-  printf("lookup_address: %p\n", my_lookup_address);
-  printf("calling lookup_address(%p, &level);\n", (void*)addr);
   unsigned int level;
   void* ret = my_lookup_address(addr, &level);
-  printf("ret: %p\n", ret);
 
   struct pte* pte_p = (struct pte*) ret;
   pte_p->RW = 1;
@@ -387,6 +384,7 @@ void sym_make_pg_writable(uint64_t addr){
 void sym_make_pg_unwritable(uint64_t addr){
   unsigned int level;
   sym_elevate();
+  printf("made page writable\n");
   // Get PTE 
   struct pte* pte_p = sym_get_pte(addr, &level);
   pte_p->RW = 0;
