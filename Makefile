@@ -63,19 +63,15 @@ all: $(ALL_LIBS)
 
 # TODO: Extend this to build each layer, but for now just lump all together.
 
+# This is the dynamic shared object
 libSym.so:
 	mkdir -p dynam_build/
-	gcc -D CONFIG_X86_64 -Wall -Wextra -shared -fPIC -I ./include $(ALL_SRC) -o dynam_build/$@
+	gcc -D CONFIG_DYNAMIC -D CONFIG_X86_64 -Wall -Wextra -shared -fPIC -I ./include $(ALL_SRC) -o dynam_build/$@
 	$(call boldprint, 'Built libSym.so')
 
 debug:
 	mkdir -p dynam_build/
 	gcc  -D CONFIG_X86_64 -fPIC -shared -I ./include src/L2/sym_lib_page_fault.c -o dynam_build/libSym.so
-
-dynam_L0:
-	mkdir -p dynam_build/L0/
-	gcc -g -D DYNAM -D CONFIG_X86_64 -Wall -Wextra -fPIC  -c src/L0/sym_lib.c -o dynam_build/L0/sym_lib.o -I include
-	gcc -shared -fPIC -o dynam_build/L0/libelevate.so dynam_build/L0/sym_lib.o
 
 # NOTE: Inf and libsym are the same :)
 $(LIB_SYM): $(LIB_LINF)

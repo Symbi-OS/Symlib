@@ -14,25 +14,6 @@ __thread int is_sticky = 0;
 #include "../../arch/x86_64/L0/sym_lib.h"
 #endif
 
-#ifdef DYNAM
-void __attribute__ ((constructor)) initLibrary(void) {
-  //
-  // Function that is called when the library is loaded
-  //
-
-  // Let's touch stack pages before elevating to try to avoid starvation.
-  sym_elevate();
-}
-
-void __attribute__ ((destructor)) cleanUpLibrary(void) {
-  //
-  // Function that is called when the library is »closed«.
-  //
-  sym_lower();
-}
-#endif
-
-
 static long sym_do_syscall(int work){
   if(!is_sticky){
     return syscall(NR_ELEVATE_SYSCALL, work);
