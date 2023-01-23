@@ -10,7 +10,7 @@ typedef unsigned long (*kallsyms_lookup_name_t)(const char *name);
 static kallsyms_lookup_name_t kallsyms_lookup_name = NULL;
 
 void parse_system_map() {
-	const char* system_map_path = "/boot/System.map-5.14.0-symbiote+";
+	const char* system_map_path = "/boot/System.map";
 
 	unsigned long long addr;
 	char type;
