@@ -10,7 +10,20 @@ typedef unsigned long (*kallsyms_lookup_name_t)(const char *name);
 static kallsyms_lookup_name_t kallsyms_lookup_name = NULL;
 
 void parse_system_map() {
-	const char* system_map_path = "/boot/System.map-5.14.0-symbiote+";
+	char kernel_version[128] = {0};
+	// Bit bigger to avoid compiler warnings.
+	char system_map_path[2*128] = {0};
+
+	FILE* fp_version = fopen("/proc/version", "r");
+	if (fp_version == NULL) {
+		fprintf(stderr, "Could not open /proc/version\n");
+	}
+
+	fscanf(fp_version, "Linux version %s", kernel_version);
+	fclose(fp_version);
+
+	// Use kernel version to get system map path
+	sprintf(system_map_path, "/boot/System.map-%s", kernel_version);
 
 	unsigned long long addr;
 	char type;
@@ -18,8 +31,7 @@ void parse_system_map() {
 
 	FILE* fp = fopen(system_map_path, "r");
 	if (fp == NULL) {
-		perror(system_map_path);
-		return;
+		fprintf(stderr, "Could not open system map: %s\n", system_map_path);
 	}
 
 	int n;
