@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS= -g -D CONFIG_X86_64 -Wall -Wextra #-static -mno-red-zone
+CFLAGS= -g -D CONFIG_X86_64 -Wall -Wextra -mno-red-zone
 .PHONY: clean all
 
 # Ignores TODO: remove them all
@@ -64,14 +64,11 @@ all: $(ALL_LIBS)
 # TODO: Extend this to build each layer, but for now just lump all together.
 
 # This is the dynamic shared object
+
 libSym.so:
 	mkdir -p dynam_build/
-	gcc -D CONFIG_DYNAMIC -D CONFIG_X86_64 -Wall -Wextra -shared -fPIC -I ./include $(ALL_SRC) -o dynam_build/$@
+	gcc -D CONFIG_DYNAMIC $(CFLAGS) -shared -fPIC -I ./include $(ALL_SRC) -o dynam_build/$@
 	$(call boldprint, 'Built libSym.so')
-
-debug:
-	mkdir -p dynam_build/
-	gcc  -D CONFIG_X86_64 -fPIC -shared -I ./include src/L2/sym_lib_page_fault.c -o dynam_build/libSym.so
 
 # NOTE: Inf and libsym are the same :)
 $(LIB_SYM): $(LIB_LINF)
