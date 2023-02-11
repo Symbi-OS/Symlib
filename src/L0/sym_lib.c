@@ -29,10 +29,9 @@ long sym_mode_shift(uint64_t flags){
 long sym_elevate(){
   // XXX HACK This assumes we can just clobber user's gsbase...
   // I believe it also assumes no core migration...
-  uint64_t kern_gs;
 
   long ret = sym_mode_shift( SYM_ELEVATE_FLAG | SYM_INT_DISABLE_FLAG );
-  GET_KERN_GS_CLOBBER_USER_GS
+  GET_KERN_GS_CLOBBER_USER_GS;
   return ret;
 }
 
