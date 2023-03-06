@@ -3,8 +3,10 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "L1/stack_switch.h"
 #include "L2/sym_lib_page_fault.h"
 #include "L2/sym_probe.h"
+
 
 typedef unsigned long (*kallsyms_lookup_name_t)(const char *name);
 static kallsyms_lookup_name_t kallsyms_lookup_name = NULL;
@@ -56,10 +58,10 @@ void* sym_get_fn_address(char *symbol) {
   sym_elevate();
   // TODO: clean this up  
   uint64_t user_stack;
-  asm volatile("mov %%rsp, %0" : "=m"(user_stack) : : "memory");
-  asm volatile("mov %gs:0x17b90, %rsp");
+  SYM_PRESERVE_USER_STACK(user_stack);
+  SYM_SWITCH_TO_KERN_STACK();
   void* result = (void*)kallsyms_lookup_name(symbol);
-  asm volatile("mov %0, %%rsp" : : "r"(user_stack));
+  SYM_RESTORE_USER_STACK(user_stack);
   // Don't forget to lower
   sym_lower();
 

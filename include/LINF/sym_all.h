@@ -7,14 +7,18 @@
 #include "L0/sym_lib_hacks.h"
 #include "L0/sym_structs.h"
 #include "L1/sym_interrupts.h"
+#include "L1/stack_switch.h"
 #include "L2/sym_lib_page_fault.h"
 #include "L2/sym_probe.h"
 #include "L2/sym_get_addr.h"
 #include "L3/mitigate.h"
 
-// HACK: Be careful with this. Is it behind a #define for x64 here, when the user includes it?
+// OK these aren't needed to build the symlib on its own, but they
+// are needed to build external tools like idt_tool. This is a HACK
+// We should resolve this somehow, such as having a configure step or something.
+// Basically we need to define the arch specific stuff, CONFIG_X86_64.
 #include "../arch/x86_64/L2/common.h"
-
+#include "../arch/x86_64/L1/stack_switch.h"
 
 #include "LINF/init.h"
 #endif
