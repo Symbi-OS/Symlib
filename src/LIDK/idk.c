@@ -54,9 +54,12 @@ void* sym_get_fn_address(char *symbol) {
 
   // Elevate to be able to call kallsyms_lookup_name
   sym_elevate();
-
+  // TODO: clean this up  
+  uint64_t user_stack;
+  asm volatile("mov %%rsp, %0" : "=m"(user_stack) : : "memory");
+  asm volatile("mov %gs:0x17b90, %rsp");
   void* result = (void*)kallsyms_lookup_name(symbol);
-
+  asm volatile("mov %0, %%rsp" : : "r"(user_stack));
   // Don't forget to lower
   sym_lower();
 
