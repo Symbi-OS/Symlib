@@ -347,5 +347,6 @@ uint64_t get_scratch_pg(int core){
   read(fd, pg_ptr, 100);
   
   scratch_pg = strtoull(pg_ptr, NULL, 0);
+  close(fd);
   return scratch_pg;
 }
