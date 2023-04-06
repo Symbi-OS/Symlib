@@ -250,13 +250,10 @@ unsigned char sym_set_db_probe(uint64_t addr, uint64_t reg, uint64_t db_flag){
   if((reg >= DB_REGS) || ((db_flag != DB_LOCAL) && (db_flag != DB_GLOBAL)))
     exit(-1);
 
-  sym_elevate();
   unsigned char ret = *(unsigned char *) addr;
-  sym_lower();
 
   dr7.val = 0;
 
-  sym_elevate();
   switch(reg) {
     case 0:
       // place addr into DR0
@@ -293,7 +290,6 @@ unsigned char sym_set_db_probe(uint64_t addr, uint64_t reg, uint64_t db_flag){
   }
   SET_DR(7, dr7);
 
-  sym_lower();
 
   return ret;
 }
