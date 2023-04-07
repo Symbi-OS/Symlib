@@ -125,6 +125,8 @@ void sym_update_desc_handler(union idt_desc *desc, void *p){
 
 // Loads up an addr from a desc.
 void sym_load_addr_from_desc(union idt_desc *desc, union idt_addr *addr){
+  printf("about to load addr from desc\n");
+  
   sym_elevate();
   addr->dcmp.lo  = desc->fields.lo_addr;
   addr->dcmp.mid = desc->fields.mid_addr;
@@ -145,12 +147,14 @@ void sym_load_desc_from_addr(union idt_desc *desc, union idt_addr *addr){
 void sym_print_idt_desc(unsigned char *idt, unsigned int idx){
   union idt_desc *my_desc;
   my_desc = sym_get_idt_desc(idt, idx);
-
-  printf("my_desc lives at %p\n", my_desc);
+  printf("IDT at %p\n", idt);
+  printf("Descriptor %d at %p\n", idx, my_desc);
 
   union idt_addr my_idt_addr;
 
   sym_load_addr_from_desc(my_desc, &my_idt_addr);
+  
+  printf("got idt addr\n");
 
   sym_elevate();
   printf("full addr: %lx\n", my_idt_addr.raw       );
@@ -164,3 +168,12 @@ void sym_print_idt_desc(unsigned char *idt, unsigned int idx){
 
 }
 
+// some externally facing fns that might be useful for scripting.
+void sym_print_idtr(){
+  struct dtr idtr;
+  sym_store_idt_desc(&idtr);
+  printf("idtr limit: %#x \n", idtr.limit);
+  printf("idtr base : %#lx \n", idtr.base);
+}
+
+// just hacking to make example work...
