@@ -59,7 +59,6 @@ void* sym_get_fn_address(char *symbol) {
   // Elevate to be able to call kallsyms_lookup_name
   if (!already_elevated)
     sym_elevate();
-  
 
   // TODO: clean this up  
   uint64_t user_stack;
