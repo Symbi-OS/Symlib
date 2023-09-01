@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include "L0/sym_lib_hacks.h"
+#include <stdint.h>
+
+#define PAGE_SIZE (1<<12)
 
 #ifdef CONFIG_X86_64
 // TODO turn this into a header?
@@ -13,12 +16,15 @@ extern char __etext;
 
 extern void sym_touch_every_page_text(){
 #ifndef CONFIG_DYNAMIC
-  unsigned char *p;
-  p = (unsigned char *) &__executable_start;
+  // Cast pointers to uintptr_t for raw address arithmetic
+  uintptr_t start_addr = (uintptr_t)&__executable_start;
+  uintptr_t end_addr = (uintptr_t)&__etext;
 
   unsigned char VARIABLE_IS_NOT_USED c;
-  for(; p < (unsigned char *)&__etext; p+= (1<<12))
-    c = *p;
+  for(uintptr_t addr = start_addr; addr < end_addr; addr += PAGE_SIZE){
+    c = *(unsigned char*)addr;
+  }
+
 #else
   // TODO: use this tool to remove unintended use of this fn in the dynam case.
   // fprintf(stderr, "sym_touch_every_page_text() not implemented for dynamic\n");
