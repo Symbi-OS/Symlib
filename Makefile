@@ -1,5 +1,21 @@
 CC=gcc
 CFLAGS= -g -D CONFIG_X86_64 -Wall -Wextra -mno-red-zone
+
+# Compiler selection
+# If CLANG=true, use clang; otherwise, use gcc
+ifeq ($(CLANG),true)
+	CC=clang
+# Not really used here
+# MAKE=scan-build make
+# do scan-build
+else
+	CC=gcc
+	CFLAGS+=-fanalyzer
+endif
+
+
+
+
 .PHONY: clean all
 
 # Ignores TODO: remove them all
@@ -61,13 +77,16 @@ boldprint = @printf '\e[1m%s\e[0m\n' $1
 
 all: $(ALL_LIBS)
 
+cppcheck:
+	cppcheck .
+
 # TODO: Extend this to build each layer, but for now just lump all together.
 
 # This is the dynamic shared object
 
 libSym.so:
 	mkdir -p dynam_build/
-	gcc -D CONFIG_DYNAMIC $(CFLAGS) -shared -fPIC -I ./include $(ALL_SRC) -o dynam_build/$@
+	$(CC) -D CONFIG_DYNAMIC $(CFLAGS) -shared -fPIC -I ./include $(ALL_SRC) -o dynam_build/$@
 	$(call boldprint, 'Built libSym.so')
 
 # NOTE: Inf and libsym are the same :)
