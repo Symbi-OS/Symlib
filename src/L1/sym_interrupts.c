@@ -1,6 +1,7 @@
 #include "L0/sym_lib.h"
 #include "L0/sym_structs.h"
 #include <string.h>
+#include <stdlib.h>
 
 #ifdef CONFIG_X86_64
 #include "../../arch/x86_64/L1/sym_interrupts.h"
@@ -60,6 +61,11 @@ void sym_copy_system_idt(unsigned char *sym_idt_base){
   sym_store_idt_desc(&idtr);
 
   /* printf("kern idt at %p\n", idtr.base); */
+  if (sym_idt_base == 0 || idtr.base == 0) {
+    printf("sym_idt_base or idtr.base is null\n");
+    exit(1);
+  }
+
   sym_elevate();
   memcpy( (void *) sym_idt_base, (const void *) idtr.base, IDT_SZ_BYTES);
   sym_lower();

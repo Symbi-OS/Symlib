@@ -36,8 +36,7 @@ void parse_system_map() {
 		fprintf(stderr, "Could not open system map: %s\n", system_map_path);
 	}
 
-	int n;
-	while ((n = fscanf(fp, "%llx %c %s", &addr, &type, symbol)) != EOF) {
+	while (fscanf(fp, "%llx %c %s", &addr, &type, symbol) != EOF) {
 		if (strcmp(symbol, "kallsyms_lookup_name") == 0) {
 			kallsyms_lookup_name = (kallsyms_lookup_name_t)addr;
 			break;

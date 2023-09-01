@@ -1,5 +1,5 @@
 #ifndef __SYM_LIB_PAGE_FAULT__
-#define __SYM_LIB_PATE_FAULT__
+#define __SYM_LIB_PAGE_FAULT__
 
 #include "L0/sym_structs.h"
 #include "L0/sym_lib.h"
